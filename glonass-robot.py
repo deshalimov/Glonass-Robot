@@ -1,9 +1,11 @@
 import requests
 import json
 
+buildVersion = "5c2f6373d13417f0dff6a1e572c2009734450c7f"
+url = 'https://d.monitoring.aoglonass.ru/rpc'
+
 # авторизация
 def auth(login, password):
-    url = 'https://monitoring.aoglonass.ru/rpc?method=login'
     headers = {
         'Content-Type': 'application/json'
     }
@@ -11,7 +13,7 @@ def auth(login, password):
         "jsonrpc": "2.0",
         "method": "api1.login",
         "id": 3,
-        "buildVersion": "5c2f6373d13417f0dff6a1e572c2009734450c7f",
+        "buildVersion": buildVersion,
         "params": [
             login,
             password,
@@ -19,13 +21,12 @@ def auth(login, password):
         ]
     }
 
-    res = requests.post(url, headers=headers, json=data)
+    res = requests.post(url + '?method=login', headers=headers, json=data)
 
     return str(res.json()["result"])
 
 # получить информацию по ТС
 def get_car_info(params, licence_plate):
-    url = 'https://d.monitoring.aoglonass.ru/rpc?method=vehicle.getPortion'
     headers = {
         'Content-Type': 'application/json'
         }
@@ -34,7 +35,7 @@ def get_car_info(params, licence_plate):
         "jsonrpc": "2.0",
         "method": "api1.vehicle.getPortion",
         "id": 457,
-        "buildVersion": "5c2f6373d13417f0dff6a1e572c2009734450c7f",
+        "buildVersion": buildVersion,
         "changeId": 5887263,
         "params": [
             params,
@@ -63,22 +64,20 @@ def get_car_info(params, licence_plate):
         ]
     }
 
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url + '?method=vehicle.getPortion', headers=headers, json=data)
     return response
 
 def update_info(license_plate, vehicle_id, eventgenerator_settings_json, comment, access_token, state):    
 
-    url = 'https://d.monitoring.aoglonass.ru/rpc'
     headers = {
-        'Content-Type': 'application/json',
-        'Cookie': 'MonitoringSessionID=ffffffff0945d34e45525d5f4f58455e445a4a423660'
+        'Content-Type': 'application/json'
     }
 
     data = {
         "jsonrpc": "2.0",
         "method": "api1.repo.apply",
         "id": 3561,
-        "buildVersion": "5c2f6373d13417f0dff6a1e572c2009734450c7f",
+        "buildVersion": buildVersion,
         "params": [
             access_token,
             {
@@ -100,7 +99,6 @@ def update_info(license_plate, vehicle_id, eventgenerator_settings_json, comment
     response = requests.post(url, headers=headers, json=data)
 
     print(license_plate, response.json())
-    #return response
 
 def activated(license_plate, access_token):
     try:
