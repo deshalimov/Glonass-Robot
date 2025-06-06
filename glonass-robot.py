@@ -1,8 +1,23 @@
 import requests
 import json
 
-buildVersion = "5c2f6373d13417f0dff6a1e572c2009734450c7f"
+buildVersion = "0a439da7b1a506b1de3f0e12dd8a3110decd54c4"
 url = 'https://d.monitoring.aoglonass.ru/rpc'
+
+# Получить версию сборки
+def get_build_version():
+  url = "https://monitoring.aoglonass.ru/js/app.497c1d8e858bf6de.js"
+
+  headers = {
+      "sec-ch-ua-platform": '"Windows"',
+      "Referer": "https://monitoring.aoglonass.ru/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+  }
+
+
+  resp = requests.get(url, headers=headers).text
+  index = resp.index("buildVersion")
+  return resp[index+31:index+71]
 
 # авторизация
 def auth(login, password):
